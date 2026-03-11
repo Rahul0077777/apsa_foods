@@ -1,0 +1,12 @@
+<IfModule mod_rewrite.c>
+    RewriteEngine On
+    # Redirect traffic to the public directory
+    RewriteRule ^(.*)$ public/$1 [L]
+</IfModule>
+
+<FilesMatch "\.(env|sql|log|ini|sh|zip|rar|tar|7z|gz)$">
+    Order allow,deny
+    Deny from all
+</FilesMatch>
+
+Options -Indexes
