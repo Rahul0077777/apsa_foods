@@ -85,10 +85,13 @@
     {{-- Price --}}
     <div class="flex items-center gap-4 mb-6">
 
-        <span id="productPrice"
-      class="text-2xl sm:text-4xl font-bold text-gray-900 dark:text-white">
-    ₹{{ number_format($item->variants->first()?->price ?? 0,2) }}
-</span>
+        <span id="productPrice" class="text-2xl sm:text-4xl font-bold text-gray-900 dark:text-white">
+            @if($isProduct)
+                ₹{{ number_format($item->variants->first()?->price ?? $item->price ?? 0, 2) }}
+            @else
+                ₹{{ number_format($item->price ?? 0, 2) }}
+            @endif
+        </span>
 
         @if($isProduct)
             <!-- <span class="line-through text-gray-400 text-lg">
@@ -109,7 +112,15 @@
         @if($isProduct)
             {!! $item->description !!}
         @else
-            <p>Premium distributor trial pack with customizable flavour selection.</p>
+            @if(is_array($item->features) && count($item->features) > 0)
+                <ul class="list-disc ml-4">
+                @foreach($item->features as $feature)
+                    <li>{{ $feature }}</li>
+                @endforeach
+                </ul>
+            @else
+                <p>Premium distributor trial pack with customizable flavour selection.</p>
+            @endif
         @endif
     </div>
 
@@ -300,7 +311,7 @@
                 
                 {{-- Title --}}
                 <div class="text-[32px] product-title mb-4" style="color: {{ $textColor }};">
-                    Bubbly {{ explode(' ', $rel->name)[1] ?? 'Lime' }}
+                    {{ $rel->name }}
                 </div>
                 
                 {{-- Shop Now Button --}}

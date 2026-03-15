@@ -120,8 +120,8 @@
                     </h2>
                     
                     <div class="flex items-center justify-center md:justify-start gap-2 mb-6 font-inter">
-                        <span class="text-[#A0A0A0] text-sm md:text-base line-through">MRP 240.00</span>
-                        <span class="text-[#8DAA36] text-sm md:text-base font-bold">From Rs. 228.00</span>
+                        <span class="text-[#A0A0A0] text-sm md:text-base line-through">MRP {{ number_format($package->price * 1.05, 2) }}</span>
+                        <span class="text-[#8DAA36] text-sm md:text-base font-bold">From Rs. {{ number_format($package->price, 2) }}</span>
                     </div>
                     
                     <form action="{{ route('cart.add.package', $package->id) }}" method="POST" class="flex justify-center md:justify-start">
@@ -195,8 +195,7 @@
                         
                         {{-- Title --}}
                         <div class="text-[32px] product-title mb-4" style="color: {{ $textColor }};">
-                            Bubbly {{ explode(' ', $product->name)[1] ?? 'Lime' }}
-                            {{-- The design mockups all show "Bubbly Lime" with cursive, we will try to extract the second word if it's "Bubbly XYZ" --}}
+                            {{ $product->name }}
                         </div>
                         
                         {{-- Shop Now Button --}}
