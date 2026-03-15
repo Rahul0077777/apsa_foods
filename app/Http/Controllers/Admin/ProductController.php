@@ -51,6 +51,9 @@ class ProductController extends Controller
         $product->name = $request->name;
         $product->slug = Str::slug($request->name);
         $product->description = $request->description;
+        $product->ingredients = $request->ingredients;
+        $product->instructions = $request->instructions;
+        $product->product_details = $request->product_details;
         $product->category_id = $request->category_id;
         $product->status = $request->status ? 1 : 0;
 
@@ -118,6 +121,9 @@ class ProductController extends Controller
         $product->name = $request->name;
         $product->slug = Str::slug($request->name);
         $product->description = $request->description;
+        $product->ingredients = $request->ingredients;
+        $product->instructions = $request->instructions;
+        $product->product_details = $request->product_details;
         $product->category_id = $request->category_id;
         $product->status = $request->status ? 1 : 0;
 

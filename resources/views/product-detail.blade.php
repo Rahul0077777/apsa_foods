@@ -2,6 +2,35 @@
 
 @section('content')
 
+<style>
+    .font-cursive { font-family: 'Dancing Script', cursive; }
+    .shop-now-btn {
+        transition: all 0.3s ease;
+        border-radius: 9999px; /* Fully rounded */
+        border: 1px solid #d1d5db; /* Light gray border */
+        background-color: transparent;
+        color: #4b5563; /* Gray text */
+        font-family: 'Inter', sans-serif;
+    }
+    .shop-now-btn:hover { background-color: #f3f4f6; }
+    .product-title {
+        font-family: 'Dancing Script', cursive;
+        color: #8DAA36;
+        font-weight: 700;
+        line-height: 1.2;
+    }
+    .all-product-btn {
+        background-color: #2F5939; /* Dark green */
+        color: white;
+        border-radius: 9999px;
+        font-family: 'Dancing Script', cursive;
+        transition: transform 0.3s ease;
+    }
+    .all-product-btn:hover {
+        transform: scale(1.05);
+    }
+</style>
+
 @php
     $isProduct = $type === 'product';
     $title = $isProduct ? $item->name : $item->title;
@@ -76,13 +105,13 @@
     </div>
 
     {{-- Description --}}
-    <p class="text-gray-600 dark:text-gray-300 leading-relaxed mb-8">
+    <div class="text-gray-600 dark:text-gray-300 leading-relaxed mb-8 prose prose-sm max-w-none prose-p:my-2 prose-ul:my-2 prose-ol:my-2">
         @if($isProduct)
-            {{ $item->description }}
+            {!! $item->description !!}
         @else
-            Premium distributor trial pack with customizable flavour selection.
+            <p>Premium distributor trial pack with customizable flavour selection.</p>
         @endif
-    </p>
+    </div>
 
     {{-- Volume & Quantity (Only Product) --}}
     @if($isProduct)
@@ -172,24 +201,38 @@
     <div class="mt-10 space-y-4">
 
         <details class="bg-gray-100 rounded-xl p-4">
-            <summary class="font-semibold cursor-pointer">Product Details</summary>
-            <p class="mt-3 text-sm text-gray-600">
-                {{ $isProduct ? $item->description : 'Trial pack includes multiple sample flavours.' }}
-            </p>
+            <summary class="font-semibold cursor-pointer outline-none">Product Details</summary>
+            <div class="mt-3 text-sm text-gray-600 prose prose-sm max-w-none prose-p:my-1 prose-ul:my-1 prose-ol:my-1">
+                @if($isProduct && $item->product_details)
+                    {!! $item->product_details !!}
+                @elseif($isProduct && $item->description)
+                    {!! $item->description !!}
+                @else
+                    <p>Trial pack includes multiple sample flavours.</p>
+                @endif
+            </div>
         </details>
 
         <details class="bg-gray-100 rounded-xl p-4">
-            <summary class="font-semibold cursor-pointer">Ingredients</summary>
-            <p class="mt-3 text-sm text-gray-600">
-                Natural ingredients. No preservatives.
-            </p>
+            <summary class="font-semibold cursor-pointer outline-none">Ingredients</summary>
+            <div class="mt-3 text-sm text-gray-600 prose prose-sm max-w-none prose-p:my-1 prose-ul:my-1 prose-ol:my-1">
+                @if($isProduct && $item->ingredients)
+                    {!! $item->ingredients !!}
+                @else
+                    <p>Natural ingredients. No preservatives.</p>
+                @endif
+            </div>
         </details>
 
         <details class="bg-gray-100 rounded-xl p-4">
-            <summary class="font-semibold cursor-pointer">Instructions</summary>
-            <p class="mt-3 text-sm text-gray-600">
-                Keep refrigerated. Shake before use.
-            </p>
+            <summary class="font-semibold cursor-pointer outline-none">Instructions</summary>
+            <div class="mt-3 text-sm text-gray-600 prose prose-sm max-w-none prose-p:my-1 prose-ul:my-1 prose-ol:my-1">
+                @if($isProduct && $item->instructions)
+                    {!! $item->instructions !!}
+                @else
+                    <p>Keep refrigerated. Shake before use.</p>
+                @endif
+            </div>
         </details>
 
     </div>
@@ -200,68 +243,90 @@
 {{-- YOU MAY ALSO LIKE --}}
 <div class="mt-20">
 
-    <h2 class="text-center text-3xl md:text-4xl italic mb-16"
+    <h2 class="text-center text-3xl md:text-4xl italic mb-16 text-[#1a3b2c] font-bold"
         style="font-family: 'Playfair Display', serif;">
         You May Also Like
-        <div class="w-16 h-[3px] bg-green-500 mx-auto mt-3 rounded-full"></div>
+        <div class="w-16 h-[3px] bg-[#8DAA36] mx-auto mt-3 rounded-full"></div>
     </h2>
 
+    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-x-8 gap-y-20 p-4 md:p-8">
     @foreach($related as $index => $rel)
+        @php
+            // Logic for exact colors from Figma based on product name
+            $bgColor = '#8DAA36'; // Default Lime Green
+            $textColor = '#8DAA36'; // Default Title Color
+            
+            if (Str::contains(Str::lower($rel->name), 'jeera')) {
+                $bgColor = '#2F5939'; // Dark green
+            }
+            if (Str::contains(Str::lower($rel->name), 'cola')) {
+                $bgColor = '#B81D22'; // Cola Red
+            }
+            if (Str::contains(Str::lower($rel->name), 'shikanji')) {
+                $bgColor = '#00A3E0'; // Blue
+            }
+            if (Str::contains(Str::lower($rel->name), 'litchi')) {
+                $bgColor = '#D95383'; // Pinkish red
+            }
+            if (Str::contains(Str::lower($rel->name), 'mojito')) {
+                $bgColor = '#2EA31E'; // Bright green
+            }
+            if (Str::contains(Str::lower($rel->name), 'club soda')) {
+                $bgColor = '#000000'; // Black
+            }
+            if (Str::contains(Str::lower($rel->name), 'aquaping')) {
+                $bgColor = '#4A5D7C'; // Grayish blue
+            }
+        @endphp
 
-<div class="grid grid-cols-1 md:grid-cols-2 gap-6 sm:gap-12 items-center mb-12 sm:mb-20">
+        <div class="flex flex-col items-center">
+            {{-- Image Container with Circle Background --}}
+            <div class="relative w-full aspect-square flex items-center justify-center mb-6">
+                <div class="absolute inset-0 m-auto w-[85%] h-[85%] rounded-full"></div>
+                <a href="{{ route('product.show', $rel->slug) }}" class="relative z-10 h-full flex items-center justify-center transform hover:scale-105 transition-transform duration-300">
+                    <img src="{{ asset('storage/'.$rel->image) }}" 
+                         alt="{{ $rel->name }}" 
+                         class="h-[110%] w-auto object-contain mb-[-10%] drop-shadow-xl saturate-110">
+                </a>
+            </div>
+            
+            {{-- Product Details --}}
+            <div class="text-center w-full">
+                {{-- Price --}}
+                <div class="flex items-center justify-center gap-2 mb-1 font-inter">
+                    <span class="text-[#A0A0A0] text-xs font-semibold line-through">MRP {{ number_format($rel->price * 1.1, 2) }}</span>
+                    <span class="text-[#2F5939] text-xs font-bold">From Rs. {{ number_format($rel->price, 2) }}</span>
+                </div>
+                
+                {{-- Title --}}
+                <div class="text-[32px] product-title mb-4" style="color: {{ $textColor }};">
+                    Bubbly {{ explode(' ', $rel->name)[1] ?? 'Lime' }}
+                </div>
+                
+                {{-- Shop Now Button --}}
+                @if($rel->status)
+                    <form action="{{ route('cart.add', $rel->id) }}" method="POST">
+                        @csrf
+                        <button type="submit" class="shop-now-btn px-8 py-2 text-sm font-semibold max-w-[200px] w-full mx-auto">
+                            Shop Now
+                        </button>
+                    </form>
+                @else
+                    <button class="shop-now-btn px-8 py-2 text-sm font-semibold max-w-[200px] w-full mx-auto cursor-not-allowed opacity-50 bg-gray-100">
+                        Out of Stock
+                    </button>
+                @endif
+            </div>
+        </div>
+    @endforeach
+    </div>
 
-    {{-- IMAGE --}}
-    <div class="{{ $index % 2 == 0 ? '' : 'md:order-2' }}">
-        <a href="{{ route('product.show',$rel->slug) }}">
-            <img src="{{ asset('storage/'.$rel->image) }}"
-                 class="w-full h-[280px] object-contain rounded-xl shadow-md bg-white">
+    {{-- All Product Button --}}
+    <div class="mt-16 flex justify-center">
+        <a href="{{ route('shop') }}" class="all-product-btn text-2xl px-16 py-3 border-4 border-[#8DAA36] shadow-lg">
+            All Product
         </a>
     </div>
-
-    {{-- CONTENT --}}
-    <div class="w-full text-center md:text-left
-        {{ $index % 2 != 0 ? 'md:order-1 md:text-right' : '' }}">
-
-        <p class="text-green-600 text-xs font-semibold uppercase tracking-wider mb-2">
-            {{ $rel->category->name ?? 'Refreshing Drink' }}
-        </p>
-
-        <h2 class="text-2xl font-bold text-gray-900 mb-3">
-            {{ $rel->name }}
-        </h2>
-
-        <p class="text-gray-500 mb-4 max-w-md 
-            {{ $index % 2 != 0 ? 'md:ml-auto' : '' }}">
-            {{ $rel->description }}
-        </p>
-
-        <div class="flex items-center justify-center md:justify-start gap-4
-            {{ $index % 2 != 0 ? 'md:justify-end' : '' }}">
-
-            <span class="text-lg font-semibold text-gray-900">
-                ₹{{ number_format($rel->price, 2) }}
-            </span>
-
-            @if($rel->status)
-            <form action="{{ route('cart.add', $rel->id) }}" method="POST">
-                @csrf
-                <button class="bg-green-500 hover:bg-green-600 text-white px-4 py-2 rounded-lg text-sm font-semibold transition">
-                    Add to Cart
-                </button>
-            </form>
-            @else
-            <button class="bg-gray-300 text-gray-500 px-4 py-2 rounded-lg text-sm font-semibold cursor-not-allowed">
-                Out of Stock
-            </button>
-            @endif
-
-        </div>
-
-    </div>
-
-</div>
-
-@endforeach
 
 </div>
 

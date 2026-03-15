@@ -24,6 +24,7 @@
                 <th class="p-3">Category</th>
                 <th class="p-3">Featured</th>
                 <th class="p-3">Date</th>
+                <th class="p-3 text-right">Actions</th>
             </tr>
         </thead>
         <tbody>
@@ -43,10 +44,15 @@
                     @endif
                 </td>
                 <td class="p-3">{{ $blog->created_at->format('d M Y') }}</td>
+                <td class="p-3 text-right">
+                    <a href="{{ route('admin.blogs.edit', $blog->id) }}" class="text-blue-600 hover:text-blue-800 font-semibold px-2 py-1 border border-blue-600 rounded">
+                        Edit
+                    </a>
+                </td>
             </tr>
             @empty
             <tr>
-                <td colspan="6" class="p-4 text-center text-gray-500">
+                <td colspan="7" class="p-4 text-center text-gray-500">
                     No blogs added yet.
                 </td>
             </tr>

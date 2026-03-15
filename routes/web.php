@@ -224,6 +224,8 @@ Route::get('/blog', [BlogController::class,'blogList'])->name('blog');
 Route::get('/admin/blogs', [BlogController::class,'index'])->name('admin.blogs');
 Route::get('/admin/blogs/create', [BlogController::class,'create'])->name('admin.blogs.create');
 Route::post('/admin/blogs/store', [BlogController::class,'store'])->name('admin.blogs.store');
+Route::get('/admin/blogs/{id}/edit', [BlogController::class, 'edit'])->name('admin.blogs.edit');
+Route::put('/admin/blogs/{id}', [BlogController::class, 'update'])->name('admin.blogs.update');
 Route::get('/blog/{slug}', [BlogController::class,'show'])->name('blog.show');
     
 Route::post('/subscribe', [SubscriberController::class, 'store'])->name('subscribe');

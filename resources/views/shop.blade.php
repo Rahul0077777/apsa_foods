@@ -2,375 +2,219 @@
 
 @section('content')
 <style>
-.wishlist-btn.active span {
-    color: #ef4444;
-    animation: pop 0.3s ease;
-}
-@keyframes pop {
-    0% { transform: scale(1); }
-    50% { transform: scale(1.4); }
-    100% { transform: scale(1); }
-}
+    .font-cursive {
+        font-family: 'Dancing Script', cursive;
+    }
+    
+    .font-abril {
+        font-family: 'Abril Fatface', cursive;
+    }
 
-/* 3D image container */
-.product-img-box {
-    perspective: 900px;
-    position: relative;
-}
-.product-img-inner {
-    transition: transform 0.5s cubic-bezier(0.25,0.46,0.45,0.94),
-                box-shadow 0.5s ease;
-    border-radius: 1rem;
-    overflow: hidden;
-    position: relative;
-}
-.product-row:hover .product-img-inner {
-    transform: rotateY(-4deg) rotateX(2deg) scale(1.02);
-    box-shadow:
-        12px 16px 40px rgba(51,230,51,0.18),
-        0 4px 12px rgba(0,0,0,0.08);
-}
-.product-row:nth-child(even):hover .product-img-inner {
-    transform: rotateY(4deg) rotateX(2deg) scale(1.02);
-}
+    .shop-now-btn {
+        transition: all 0.3s ease;
+        border-radius: 9999px; /* Fully rounded */
+        border: 1px solid #d1d5db; /* Light gray border */
+        background-color: transparent;
+        color: #4b5563; /* Gray text */
+        font-family: 'Inter', sans-serif;
+    }
+    
+    .shop-now-btn:hover {
+        background-color: #f3f4f6; /* Light gray hover */
+    }
 
-/* Floating animation for image */
-.product-img-inner img {
-    transition: transform 0.5s ease;
-}
-.product-row:hover .product-img-inner img {
-    transform: translateY(-6px) scale(1.04);
-}
+    /* Product Title Styling */
+    .product-title {
+        font-family: 'Dancing Script', cursive;
+        color: #8DAA36; /* Default lime green, overridden inline */
+        font-weight: 700;
+        line-height: 1.2;
+    }
 
-/* Green glow beneath image */
-.product-img-box::after {
-    content: '';
-    position: absolute;
-    bottom: -10px;
-    left: 15%;
-    right: 15%;
-    height: 20px;
-    background: radial-gradient(ellipse, rgba(51,230,51,0.22) 0%, transparent 70%);
-    border-radius: 50%;
-    opacity: 0;
-    transition: opacity 0.5s ease;
-    pointer-events: none;
-}
-.product-row:hover .product-img-box::after {
-    opacity: 1;
-}
+    .trial-pack-btn {
+        transition: all 0.3s ease;
+        border-radius: 9999px; /* Fully rounded */
+        font-family: 'Inter', sans-serif;
+        background-color: #8DAA36;
+        color: white;
+        font-weight: 700;
+    }
 
-/* Subtle shine sweep on hover */
-.product-img-inner::before {
-    content: '';
-    position: absolute;
-    top: 0; left: -75%;
-    width: 50%; height: 100%;
-    background: linear-gradient(
-        120deg,
-        transparent 0%,
-        rgba(255,255,255,0.25) 50%,
-        transparent 100%
-    );
-    z-index: 2;
-    transition: left 0.7s ease;
-    pointer-events: none;
-}
-.product-row:hover .product-img-inner::before {
-    left: 125%;
-}
-
-/* Content side hover accent */
-.product-row {
-    transition: transform 0.3s ease;
-}
-.product-row:hover {
-    transform: translateY(-4px);
-}
+    .trial-pack-btn:hover {
+        background-color: #7a932e;
+        transform: scale(1.02);
+    }
 </style>
 
-<main class="flex-grow">
-<div class="mx-auto max-w-7xl px-4 md:px-10 py-8">
-    <!-- DEBUG: Total Products: {{ $products->total() }} -->
-    <!-- DEBUG: Current Page Count: {{ $products->count() }} -->
-<div class="flex flex-col lg:flex-row gap-8">
-
-<!-- ================= PRODUCTS AREA ================= -->
-<div class="flex-1 flex flex-col">
-
-<!-- Toolbar -->
-<div class="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-3 mb-6">
-    <div class="text-sm">
-        <a href="/">Home</a> / <b>Shop</b>
+<main class="flex-grow bg-[#fcfcfc] dark:bg-[#0c180c]">
+    <div class="w-full">
+        
+        {{-- Top Banner Section --}}
+        <div class="w-full mb-6 relative">
+       <img 
+        src="{{ asset('images/shop_banner.jpg') }}" 
+        alt="Shop Banner" 
+        class="w-full h-auto object-contain"
+       />
     </div>
-    <form method="GET" action="{{ route('shop') }}" class="flex items-center gap-2">
-        <label class="text-sm font-medium">Sort by:</label>
-
-        <select name="sort" onchange="this.form.submit()"
-            class="rounded-lg border px-3 py-2 text-sm">
-
-            <option value="">Featured</option>
-            <option value="low_high" {{ request('sort')=='low_high'?'selected':'' }}>
-                Price: Low to High
-            </option>
-            <option value="high_low" {{ request('sort')=='high_low'?'selected':'' }}>
-                Price: High to Low
-            </option>
-        </select>
-
-        {{-- Keep filters on sort --}}
-        @foreach(request()->get('category', []) as $cat)
-            <input type="hidden" name="category[]" value="{{ $cat }}">
-        @endforeach
-        <input type="hidden" name="max_price" value="{{ request('max_price') }}">
-    </form>
-
-</div>
-
-{{-- DISTRIBUTOR BANNER --}}
-@if(isset($packages) && $packages->count())
-
-@foreach($packages as $package)
-
-<div class="mb-12">
-
-    <div class="relative overflow-hidden rounded-2xl 
-                bg-gradient-to-r from-[#e6f4ea] to-[#f4fbf6]
-                border border-[#d6eadf]">
-
-        <div class="grid grid-cols-1 md:grid-cols-2 items-center">
-
-
-            {{-- LEFT IMAGE --}}
-           <div class="relative h-[240px] md:h-[260px] flex items-center justify-center">
-
-                <a href="{{ route('product.show', $package->slug) }}">
-
-                    <img src="{{ asset('storage/'.$package->image) }}"
-                        class="h-full object-contain hover:scale-105 transition duration-300 cursor-pointer">
-
-                </a>
-
-            </div>
-
-
-            {{-- RIGHT CONTENT --}}
-            <div class="p-8">
-
-
-                {{-- Badge --}}
-                <span class="inline-block bg-green-200 text-green-700 
-                             text-xs font-bold px-3 py-1 rounded-full mb-3">
-
-                    DISTRIBUTOR PORTAL
-
-                </span>
-
-
-                {{-- Title --}}
-                <h2 class="text-3xl font-black text-[#0d1b0d] mb-3">
-
-                    {{ $package->title }}
-
-                </h2>
-
-
-                {{-- Description --}}
-                {{-- FEATURES --}}
-                <ul class="space-y-2 mb-6">
-
-                    @foreach($package->features as $feature)
-
-                    <li class="flex items-center gap-2 text-xs text-gray-600 dark:text-gray-300">
-
-                        <span class="material-symbols-outlined text-primary text-sm">
-                            check_circle
-                        </span>
-
-                        {{ $feature }}
-
-                    </li>
-
-                    @endforeach
-
-                </ul>
-
-
-               @if($package->status)
-
-                <form action="{{ route('cart.add.package', $package->id) }}" method="POST">
-
-                    @csrf
-
-                    <button type="submit"
-                        class="inline-flex items-center gap-2 
-                            bg-primary hover:bg-green-500
-                            text-[#0d1b0d]
-                            px-6 py-3 rounded-lg
-                            font-bold shadow-md shadow-primary/20
-                            transition-all">
-
-                        <span class="material-symbols-outlined">
-                            shopping_cart
-                        </span>
-
-                        Add to Cart
-
-                    </button>
-
-                </form>
-
-                @else
-
-                <button
-                    class="inline-flex items-center gap-2 
-                        bg-gray-300 text-gray-500
-                        px-6 py-3 rounded-lg
-                        font-bold cursor-not-allowed">
-
-                    Out of Stock
-
-                </button>
-
-                @endif
-
-
-            </div>
-
+        
+        {{-- Cursive Intro Text --}}
+        <div class="text-center mb-8 px-4">
+            <p class="font-cursive text-2xl md:text-3xl lg:text-4xl text-[#111111] leading-tight max-w-3xl mx-auto">
+                <span class="block">Blackbuster Cast</span>
+                <span class="block">Every flavour is a star. ek baar nahi miss karna yaar.</span>
+                <span class="block">kuch Naya, Shikanji or Nimbuz, jaayo inko baar baar!</span>
+            </p>
         </div>
 
-    </div>
-
-</div>
-
-@endforeach
-
-@endif
-
-<!-- ================= PRODUCT LIST (ALTERNATING + 3D) ================= -->
-<div class="flex flex-col gap-16 py-10">
-
-@foreach($products as $index => $product)
-
-<div class="product-row flex flex-col md:flex-row items-center gap-6 md:gap-10">
-
-    {{-- IMAGE (square, 3D) --}}
-    <div class="w-full md:w-1/2 flex justify-center {{ $index % 2 != 0 ? 'md:order-2' : '' }}">
-
-        <a href="{{ route('product.show', $product->slug) }}" class="block">
-            <div class="product-img-box">
-                <div class="product-img-inner w-[280px] h-[280px] sm:w-[320px] sm:h-[320px] bg-gradient-to-br from-[#f0faf0] via-white to-[#e8f5e8] 
-                            flex items-center justify-center p-6 border border-green-100/60 shadow-sm rounded-2xl">
-                    <img src="{{ asset('storage/'.$product->image) }}"
-                         class="max-h-full max-w-full object-contain drop-shadow-lg"
-                         alt="{{ $product->name }}">
+        {{-- Toolbar / Filters Placeholder (Matching design) --}}
+        <div class="flex flex-col md:flex-row justify-between items-start md:items-center gap-4 mb-12 border-y border-gray-200 p-4 bg-white w-full mx-auto px-4 md:px-8">
+            <div class="flex flex-wrap items-center gap-4 w-full md:w-auto">
+                {{-- Show Filters Placeholder (could be tied to a modal or sliding sidebar in the future) --}}
+                <button class="flex items-center gap-2 text-sm text-gray-600 px-4 py-2 border border-gray-300 rounded hover:bg-gray-50 shrink-0">
+                    <span class="material-symbols-outlined text-[18px]">tune</span>
+                    Show Filters
+                </button>
+                <div class="text-sm shrink-0">
+                    <a href="/" class="hover:text-primary transition-colors">Home</a> / <span class="text-neutral-900 font-bold">Shop</span>
                 </div>
             </div>
-        </a>
 
-    </div>
+            <form method="GET" action="{{ route('shop') }}" class="flex items-center gap-2 w-full md:w-auto mt-2 md:mt-0 justify-between md:justify-end">
+                <label class="text-sm font-medium text-gray-500 whitespace-nowrap">Sort by:</label>
+                <select name="sort" onchange="this.form.submit()" class="text-sm border flex-grow md:flex-grow-0 border-gray-200 rounded-md p-1 bg-transparent outline-none text-gray-800 font-medium font-inter cursor-pointer">
+                    <option value="">Featured</option>
+                    <option value="low_high" {{ request('sort')=='low_high'?'selected':'' }}>Price: Low to High</option>
+                    <option value="high_low" {{ request('sort')=='high_low'?'selected':'' }}>Price: High to Low</option>
+                </select>
 
-
-    {{-- CONTENT --}}
-    <div class="w-full md:w-1/2 text-center md:text-left
-        {{ $index % 2 != 0 ? 'md:order-1 md:text-right' : '' }}">
-
-        {{-- Category --}}
-        <p class="text-green-600 text-xs font-semibold uppercase tracking-wider mb-2">
-            {{ $product->category->name ?? 'Refreshing Drink' }}
-        </p>
-
-        {{-- Name --}}
-        <h2 class="text-xl sm:text-2xl font-bold text-gray-900 mb-3">
-            {{ $product->name }}
-        </h2>
-
-        {{-- Description --}}
-        <p class="text-gray-500 mb-4 max-w-md mx-auto md:mx-0
-            {{ $index % 2 != 0 ? 'md:ml-auto' : '' }}">
-            {{ $product->description }}
-        </p>
-
-        {{-- Price + Button --}}
-        <div class="flex items-center justify-center md:justify-start gap-4
-            {{ $index % 2 != 0 ? 'md:justify-end' : '' }}">
-
-            <span class="text-lg font-semibold text-gray-900">
-                ₹{{ number_format($product->price, 2) }}
-            </span>
-
-            @if($product->status)
-            <form action="{{ route('cart.add', $product->id) }}" method="POST">
-                @csrf
-                <button class="bg-green-500 hover:bg-green-600 text-white px-4 py-2 rounded-lg text-sm font-semibold transition">
-                    Add to Cart
-                </button>
+                {{-- Keep existing filters on sort --}}
+                @foreach(request()->get('category', []) as $cat)
+                    <input type="hidden" name="category[]" value="{{ $cat }}">
+                @endforeach
+                <input type="hidden" name="max_price" value="{{ request('max_price') }}">
             </form>
-            @else
-            <button class="bg-gray-300 text-gray-500 px-4 py-2 rounded-lg text-sm font-semibold cursor-not-allowed">
-                Out of Stock
-            </button>
-            @endif
-
         </div>
 
+        {{-- Trial Pack Section (if available) --}}
+        <div class="px-4 md:px-8">
+            @if(isset($packages) && $packages->count())
+                @foreach($packages as $package)
+                <div class="flex flex-col md:flex-row items-center justify-between mb-24 gap-8 md:gap-16">
+                {{-- Left Side: Image Container with Gray Background --}}
+                <div class="w-full md:w-[60%] h-[300px] md:h-[400px] bg-[#d9d9d9] rounded-3xl flex items-center justify-center overflow-hidden p-8">
+                    @if($package->image)
+                        <img src="{{ asset('storage/'.$package->image) }}" alt="{{ $package->title }}" class="w-full h-full object-contain mix-blend-multiply hover:scale-105 transition duration-500">
+                    @else
+                        {{-- Fallback if no image uploaded --}}
+                        <span class="text-gray-400 font-semibold">Image</span>
+                    @endif
+                </div>
+                
+                {{-- Right Side: Content --}}
+                <div class="w-full md:w-[40%] text-center md:text-left">
+                    <h2 class="text-6xl md:text-[80px] font-abril text-[#111] mb-2 leading-none">
+                        {{ $package->title }}
+                    </h2>
+                    
+                    <div class="flex items-center justify-center md:justify-start gap-2 mb-6 font-inter">
+                        <span class="text-[#A0A0A0] text-sm md:text-base line-through">MRP 240.00</span>
+                        <span class="text-[#8DAA36] text-sm md:text-base font-bold">From Rs. 228.00</span>
+                    </div>
+                    
+                    <form action="{{ route('cart.add.package', $package->id) }}" method="POST" class="flex justify-center md:justify-start">
+                        @csrf
+                        <button type="submit" class="trial-pack-btn px-12 py-3 md:px-16 md:py-4 shadow-sm text-lg w-full max-w-[300px]">
+                            Shop Now
+                        </button>
+                    </form>
+                </div>
+                </div>
+                @endforeach
+            @endif
+        </div>
+
+        {{-- Product Grid --}}
+        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-x-8 gap-y-20 p-4 md:p-8">
+            @foreach($products as $product)
+                @php
+                    // Logic for exact colors from Figma based on product name
+                    $bgColor = '#8DAA36'; // Default Lime Green
+                    $textColor = '#8DAA36'; // Default Title Color
+                    
+                    if (Str::contains(Str::lower($product->name), 'jeera')) {
+                        $bgColor = '#2F5939'; // Dark green
+                        $textColor = '#8DAA36'; // Standard Lime text for all in this design? The design shows "Bubbly Lime" text for all, which might be placeholder, but the color is all the same lime green #8DAA36.
+                    }
+                    if (Str::contains(Str::lower($product->name), 'cola')) {
+                        $bgColor = '#B81D22'; // Cola Red
+                        $textColor = '#8DAA36';
+                    }
+                    if (Str::contains(Str::lower($product->name), 'shikanji')) {
+                        $bgColor = '#00A3E0'; // Blue
+                        $textColor = '#8DAA36';
+                    }
+                    if (Str::contains(Str::lower($product->name), 'litchi')) {
+                        $bgColor = '#D95383'; // Pinkish red
+                        $textColor = '#8DAA36';
+                    }
+                    if (Str::contains(Str::lower($product->name), 'mojito')) {
+                        $bgColor = '#2EA31E'; // Bright green
+                        $textColor = '#8DAA36';
+                    }
+                    if (Str::contains(Str::lower($product->name), 'club soda')) {
+                        $bgColor = '#000000'; // Black
+                        $textColor = '#8DAA36';
+                    }
+                    if (Str::contains(Str::lower($product->name), 'aquaping')) {
+                        $bgColor = '#4A5D7C'; // Grayish blue
+                        $textColor = '#8DAA36';
+                    }
+                @endphp
+                
+                <div class="flex flex-col items-center">
+                    {{-- Image Container with Circle Background --}}
+                    <div class="relative w-full aspect-square flex items-center justify-center mb-6">
+                        <div class="absolute inset-0 m-auto w-[85%] h-[85%] rounded-full" ></div>
+                        <a href="{{ route('product.show', $product->slug) }}" class="relative z-10 h-full flex items-center justify-center transform hover:scale-105 transition-transform duration-300">
+                            <img src="{{ asset('storage/'.$product->image) }}" 
+                                 alt="{{ $product->name }}" 
+                                 class="h-[110%] w-auto object-contain mb-[-10%] drop-shadow-xl saturate-110">
+                        </a>
+                    </div>
+                    
+                    {{-- Product Details --}}
+                    <div class="text-center w-full">
+                        {{-- Price --}}
+                        <div class="flex items-center justify-center gap-2 mb-1 font-inter">
+                            <span class="text-[#A0A0A0] text-xs font-semibold line-through">MRP {{ number_format($product->price * 1.1, 2) }}</span>
+                            <span class="text-[#111111] text-xs font-bold">From Rs. {{ number_format($product->price, 2) }}</span>
+                        </div>
+                        
+                        {{-- Title --}}
+                        <div class="text-[32px] product-title mb-4" style="color: {{ $textColor }};">
+                            Bubbly {{ explode(' ', $product->name)[1] ?? 'Lime' }}
+                            {{-- The design mockups all show "Bubbly Lime" with cursive, we will try to extract the second word if it's "Bubbly XYZ" --}}
+                        </div>
+                        
+                        {{-- Shop Now Button --}}
+                        <form action="{{ route('cart.add', $product->id) }}" method="POST">
+                            @csrf
+                            <button type="submit" class="shop-now-btn px-8 py-2 text-sm font-semibold max-w-[200px] w-full mx-auto">
+                                Shop Now
+                            </button>
+                        </form>
+                    </div>
+                </div>
+            @endforeach
+        </div>
+
+        {{-- Pagination --}}
+        <div class="mt-20 flex justify-center">
+            @if($products instanceof \Illuminate\Pagination\LengthAwarePaginator)
+                {{ $products->links('pagination::tailwind') }}
+            @endif
+        </div>
     </div>
-
-</div>
-
-@endforeach
-
-</div>
-
-</div>
-
-</div>
-</div>
-<div class="mt-12 flex justify-center">
-    {{ $products->links('pagination::tailwind') }}
-</div>
 </main>
-
 @endsection
-
-
-<script>
-document.querySelectorAll('.wishlist-btn').forEach(btn => {
-    btn.addEventListener('click', function () {
-        let productId = this.dataset.id;
-        let icon = this.querySelector('span');
-
-        fetch(`/wishlist/${productId}`, {
-            method: 'POST',
-            headers: {
-                'X-CSRF-TOKEN': '{{ csrf_token() }}',
-                'Accept': 'application/json'
-            }
-        })
-        .then(res => res.json())
-        .then(data => {
-            if (data.status === 'added') {
-                this.classList.add('active');
-                icon.textContent = 'favorite';
-            } else {
-                this.classList.remove('active');
-                icon.textContent = 'favorite_border';
-            }
-        });
-    });
-});
-</script>
-<script>
-document.addEventListener('DOMContentLoaded', function () {
-    const range = document.getElementById('priceRange');
-    const priceValue = document.getElementById('priceValue');
-
-    if (range && priceValue) {
-        priceValue.textContent = range.value;
-
-        range.addEventListener('input', function () {
-            priceValue.textContent = this.value;
-        });
-    }
-});
-</script>

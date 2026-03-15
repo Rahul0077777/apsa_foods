@@ -4,96 +4,74 @@
 
 @section('content')
 
-<main class="flex-1 w-full flex flex-col items-center">
-<div class="layout-content-container flex flex-col w-full px-4 md:px-10 lg:px-40 py-8">
+<style>
+    .font-cursive { font-family: 'Dancing Script', cursive; }
+    .read-more-btn {
+        background-color: #0d4a10; /* Dark green */
+        color: white;
+        border-radius: 9999px;
+        transition: transform 0.3s ease;
+    }
+    .read-more-btn:hover {
+        transform: scale(1.05);
+    }
+</style>
 
-    <!-- Heading -->
-    <div class="flex flex-col gap-3 py-4">
-        <p class="text-4xl md:text-5xl font-black">The Fresh Press</p>
-        <p class="text-green-700 text-lg max-w-2xl">
-            Your daily dose of wellness, recipes, and health tips.
-        </p>
+<main class="flex-1 w-full flex flex-col items-center bg-[#fcfcfc] dark:bg-[#0c180c]">
+    
+    <!-- Top Banner -->
+    <div class="w-full">
+<img 
+  src="{{ asset('images/Blog_banner.jpg') }}" 
+  alt="Blog Banner" 
+  class="w-full h-auto object-contain"
+/>
     </div>
 
-    {{-- Featured Blog --}}
-    @if($featured)
-    <div class="py-6">
-        <div class="bg-white rounded-2xl overflow-hidden shadow border">
-            <div class="flex flex-col md:flex-row">
+    <div class="layout-content-container flex flex-col w-full px-4 md:px-10 lg:px-40 py-12">
+        
+        <!-- Cursive Title -->
+        <h1 class="text-center text-5xl md:text-6xl font-cursive mb-16 text-[#111]">
+            Blog
+        </h1>
 
-                <div class="w-full md:w-1/2 h-64 bg-cover bg-center"
-                     style="background-image:url('{{ asset('storage/'.$featured->image) }}')">
+        <!-- Alternating Blog List -->
+        <div class="flex flex-col gap-16 md:gap-24 mb-12">
+            @foreach($blogs as $index => $blog)
+            <div class="flex flex-col md:flex-row items-center gap-8 md:gap-16 {{ $index % 2 != 0 ? 'md:flex-row-reverse' : '' }}">
+                
+                <!-- Image Side -->
+                <div class="w-full md:w-1/2">
+                    <a href="{{ route('blog.show', $blog->slug) }}" class="block w-full rounded-2xl overflow-hidden bg-gray-200 aspect-[5/3] shadow-sm transform hover:scale-[1.02] transition">
+                        @if($blog->image)
+                            <img src="{{ asset('storage/'.$blog->image) }}" alt="{{ $blog->title }}" class="w-full h-full object-cover">
+                        @else
+                            <div class="w-full h-full flex items-center justify-center text-gray-400">No Image</div>
+                        @endif
+                    </a>
                 </div>
 
-                <div class="w-full md:w-1/2 p-10 flex flex-col justify-center gap-4">
-                    <span class="px-3 py-1 rounded-full bg-primary/20 text-green-800 text-xs font-bold w-fit">
-                        Featured
-                    </span>
-
-                    <h1 class="text-3xl font-black">
-                        {{ $featured->title }}
-                    </h1>
-
-                    <p class="text-gray-600">
-                        {{ $featured->excerpt }}
-                    </p>
-
-                    <a href="{{ route('blog.show',$featured->slug) }}"
-                       class="text-primary font-bold">
-                        Read More →
+                <!-- Content Side -->
+                <div class="w-full md:w-1/2 flex flex-col items-center text-center">
+                    <h2 class="text-2xl md:text-[28px] font-bold text-[#111] mb-6 max-w-sm leading-snug">
+                        {{ $blog->title }}
+                    </h2>
+                    
+                    <a href="{{ route('blog.show', $blog->slug) }}" class="read-more-btn px-8 py-3 text-sm md:text-base font-bold shadow-md">
+                        Read More
                     </a>
                 </div>
 
             </div>
+            @endforeach
         </div>
-    </div>
-    @endif
 
-
-    <!-- Blog Grid -->
-    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 py-6">
-
-        @foreach($blogs as $blog)
-        <article class="flex flex-col gap-4 group">
-
-            <a href="{{ route('blog.show',$blog->slug) }}">
-                <div class="w-full aspect-[4/3] rounded-xl overflow-hidden">
-                    <div class="w-full h-full bg-center bg-cover group-hover:scale-105 transition"
-                         style="background-image:url('{{ asset('storage/'.$blog->image) }}')">
-                    </div>
-                </div>
-            </a>
-
-            <div class="flex flex-col gap-2">
-                <span class="text-xs font-bold text-primary uppercase">
-                    {{ $blog->category }}
-                </span>
-
-                <h3 class="text-xl font-bold group-hover:text-green-700 transition">
-                    {{ $blog->title }}
-                </h3>
-
-                <p class="text-gray-600 text-sm line-clamp-2">
-                    {{ $blog->excerpt }}
-                </p>
-
-                <a href="{{ route('blog.show',$blog->slug) }}"
-                   class="text-sm font-semibold text-primary">
-                    Read More →
-                </a>
-            </div>
-
-        </article>
-        @endforeach
+        <!-- Pagination -->
+        <div class="flex justify-center py-8">
+            {{ $blogs->links() }}
+        </div>
 
     </div>
-
-    <!-- Pagination -->
-    <div class="flex justify-center py-8">
-        {{ $blogs->links() }}
-    </div>
-
-</div>
 </main>
 
 @endsection

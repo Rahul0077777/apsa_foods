@@ -29,8 +29,23 @@
                 </div>
 
                 <div class="mb-4">
-                    <label class="block text-sm font-semibold">Description</label>
-                    <textarea name="description" class="w-full border rounded p-2" rows="4"></textarea>
+                    <label class="block text-sm font-semibold">Short Description</label>
+                    <textarea name="description" class="w-full border rounded p-2 rich-text" rows="4"></textarea>
+                </div>
+
+                <div class="mb-4">
+                    <label class="block text-sm font-semibold">Ingredients</label>
+                    <textarea name="ingredients" class="w-full border rounded p-2 rich-text" rows="4"></textarea>
+                </div>
+
+                <div class="mb-4">
+                    <label class="block text-sm font-semibold">Instructions / Usage</label>
+                    <textarea name="instructions" class="w-full border rounded p-2 rich-text" rows="4"></textarea>
+                </div>
+
+                <div class="mb-4">
+                    <label class="block text-sm font-semibold">Detailed Product Information</label>
+                    <textarea name="product_details" class="w-full border rounded p-2 rich-text" rows="4"></textarea>
                 </div>
             </div>
 
@@ -179,4 +194,25 @@ function clearFileInput(btn) {
     const input = btn.closest('div').querySelector('.variant-image-input');
     if(input) input.value = '';
 }
+</script>
+
+<!-- CKEditor for Rich Text -->
+<script src="https://cdn.ckeditor.com/4.21.0/standard/ckeditor.js"></script>
+<script>
+    document.addEventListener("DOMContentLoaded", function() {
+        document.querySelectorAll('.rich-text').forEach(function (textarea) {
+            CKEDITOR.replace(textarea.name, {
+                versionCheck: false,
+                height: 200,
+                toolbar: [
+                    ['Styles', 'Format', 'Font', 'FontSize'],
+                    ['Bold', 'Italic', 'Underline', 'Strike'],
+                    ['NumberedList', 'BulletedList', '-', 'Outdent', 'Indent', '-', 'Blockquote'],
+                    ['JustifyLeft', 'JustifyCenter', 'JustifyRight', 'JustifyBlock'],
+                    ['Link', 'Unlink'],
+                    ['Undo', 'Redo']
+                ]
+            });
+        });
+    });
 </script>
