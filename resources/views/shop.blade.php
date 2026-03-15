@@ -61,9 +61,11 @@
         {{-- Cursive Intro Text --}}
         <div class="text-center mb-8 px-4">
             <p class="font-cursive text-2xl md:text-3xl lg:text-4xl text-[#111111] leading-tight max-w-3xl mx-auto">
-                <span class="block">Blackbuster Cast</span>
-                <span class="block">Every flavour is a star. ek baar nahi miss karna yaar.</span>
-                <span class="block">kuch Naya, Shikanji or Nimbuz, jaayo inko baar baar!</span>
+                <span class="block">Flavor ki full team ready hai yaar,</span>
+                <span class="block">Jeera ho, Shikanji ho ya Cola — sab hai superstar! </span>
+                <span class="block">Ek sip loge toh kahoge baar-baar,</span>
+                <span class="block">Ye drink nahi… summer ka blockbuster hai yaar!</span>
+
             </p>
         </div>
 
