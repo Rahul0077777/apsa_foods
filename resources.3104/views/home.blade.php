@@ -245,7 +245,7 @@
        <div class="flex justify-center">
   <img
     src="{{ asset('images/mojito.png') }}"
-    alt="Bubbly Power Mint"
+    alt="Bubbly Green Lemon"
     class="
       max-h-[420px] object-contain
     "
@@ -254,7 +254,7 @@
         <!-- LEFT CONTENT -->
         <div>
             <h2 class="text-4xl md:text-5xl font-abril font-bold text-text-main dark:text-white mb-6">
-                Bubbly Power Mint,
+                Bubbly Green Lemon
             </h2>
 
             <p class="text-lg text-gray-700 dark:text-gray-300 mb-4">

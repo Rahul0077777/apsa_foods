@@ -26,6 +26,7 @@
     <link href="https://fonts.googleapis.com/css2?family=Abril+Fatface&display=swap" rel="stylesheet">
 
     <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,600;1,600&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Dancing+Script:wght@400;600;700&display=swap" rel="stylesheet">
 
     <!-- Tailwind -->
     <script src="https://cdn.tailwindcss.com"></script>
@@ -43,7 +44,8 @@
                     "text-light": "#4c9a4c",
                 },
                 fontFamily: {
-                    "display": ["Inter", "sans-serif"]
+                    "display": ["Inter", "sans-serif"],
+                    "cursive": ["Dancing Script", "cursive"]
                 },
                 borderRadius: {
                     "DEFAULT": "0.375rem",

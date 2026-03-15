@@ -49,7 +49,7 @@ class ProductSeeder extends Seeder
                 'image' => 'products/NfdGPDZbvcj3mYHPpymUkwIbo3O9DkolVMbRHbtJ.png'
             ],
             [
-                'name' => 'Bubbly Power Mint',
+                'name' => 'Bubbly Green Lemon',
                 'slug' => 'bubbly-power-mint',
                 'description' => 'Refreshing minty energy drink with natural caffeine.',
                 'price' => 120.00,

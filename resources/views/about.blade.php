@@ -26,28 +26,25 @@
 
 <!-- ================= ABOUT PAGE START ================= -->
 
-<!-- HERO -->
-<section class="relative min-h-[60vh] md:min-h-[70vh] flex items-center justify-center overflow-hidden">
-    <!-- Background Image -->
-    <div class="absolute inset-0 z-0">
-        <img src="{{ asset('images/about-us-banner-top.jpg.jpeg') }}" alt="About Us Banner" class="w-full h-full object-cover scale-105 animate-pulse-slow">
-        <!-- Modern Gradient Overlay -->
-        <div class="absolute inset-0 bg-gradient-to-t from-black via-black/40 to-transparent"></div>
-    </div>
+<!-- HERO BANNER -->
+<section class="relative w-full overflow-hidden">
+    <img src="{{ asset('images/about-us-banner-top.jpg.jpeg') }}" alt="About Us Banner" class="w-full h-auto object-cover">
+</section>
 
-    <!-- Content -->
-    <div class="relative z-10 container mx-auto px-6 text-center text-white animate-fade-up">
-        <div class="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-primary/20 backdrop-blur-xl text-primary text-xs font-black uppercase tracking-[0.2em] mb-8 border border-primary/30 shadow-lg shadow-primary/10">
+<!-- HERO TEXT (below banner) -->
+<section class="py-12 md:py-16 text-center bg-white dark:bg-neutral-950">
+    <div class="container mx-auto px-6 animate-fade-up">
+        <div class="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-primary/10 text-primary text-xs font-black uppercase tracking-[0.2em] mb-6 border border-primary/20">
             Our Legacy
         </div>
 
-        <h1 class="text-5xl md:text-8xl font-black leading-[1] tracking-tighter mb-8 drop-shadow-2xl">
-            Belief-led.<br>
-            <span class="text-primary italic">Purpose-built.</span><br>
+        <h1 class="text-4xl md:text-6xl font-cursive leading-tight mb-6 text-neutral-900 dark:text-white">
+            Belief-led.
+            <span class="text-primary italic">Purpose-built.</span>
             Bottled to endure.
         </h1>
 
-        <p class="text-lg md:text-2xl text-white/80 max-w-3xl mx-auto leading-relaxed font-medium">
+        <p class="text-lg md:text-xl text-neutral-600 dark:text-neutral-400 max-w-2xl mx-auto leading-relaxed font-medium">
             Every brand has a beginning. Ours began with belief, resilience, and an unwavering refusal to settle for average.
         </p>
     </div>
@@ -163,8 +160,8 @@
                     />
                     <div class="absolute inset-0 bg-gradient-to-tr from-primary/40 to-transparent mix-blend-overlay"></div>
                     <div class="absolute bottom-10 left-10 glass-card p-8 rounded-2xl shadow-2xl transform group-hover:-translate-y-2 transition-transform">
-                        <p class="text-3xl font-black text-primary italic tracking-tight">#StayBold</p>
-                        <p class="text-white/70 text-sm font-bold uppercase tracking-widest mt-1">Join the tribe</p>
+                        <p class="text-3xl font-black text-primary italic tracking-tight">#Bubblydrink</p>
+                        <p class="text-white/70 text-sm font-bold uppercase tracking-widest mt-1">join the Apsavi</p>
                     </div>
                 </div>
             </div>
