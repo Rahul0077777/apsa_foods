@@ -60,15 +60,12 @@
 </section>
 
 <section class="py-16 md:py-24 px-4 md:px-10 lg:px-40">
-    <div class="flex items-end justify-between mb-10 max-w-[1200px] mx-auto">
-        <div>
-            <h2 class="text-text-main dark:text-white text-3xl font-bold tracking-tight mb-2">New Arrivals</h2>
-            <p class="text-text-light dark:text-gray-400">Freshly pressed this week.</p>
-        </div>
-        <a class="hidden sm:flex items-center gap-1 text-primary font-bold hover:underline" href="{{ route('shop') }}">
-            View All <span class="material-symbols-outlined text-sm">arrow_forward</span>
-        </a>
+    <div class="text-center max-w-2xl mx-auto mb-10">
+        <h2 class="text-3xl md:text-4xl font-bold tracking-tight mb-2">New Arrivals</h2>
+        <p class="text-gray-600 dark:text-gray-300">Freshly pressed this week.</p>
     </div>
+
+    <!-- Removed flex items-center justify-between to match Best Sellers section header perfectly -->
 
     <div class="max-w-[1200px] mx-auto overflow-x-auto no-scrollbar pb-8">
         <div class="flex gap-6 min-w-max">
@@ -97,11 +94,14 @@
                 </h3>
 
                 <p class="text-sm text-gray-500 dark:text-gray-400 mb-3">
-                    {{ \Illuminate\Support\Str::limit($product->description, 40) }}
+                    {{ \Illuminate\Support\Str::limit(html_entity_decode(strip_tags($product->description)), 40) }}
                 </p>
 
                 <div class="flex items-center justify-between">
-                    <span class="text-lg font-bold text-primary">₹ {{ $product->price }}</span>
+                    <div class="flex flex-col">
+                        <span class="text-xs text-gray-400 line-through">MRP {{ number_format($product->price * 1.05, 2) }}</span>
+                        <span class="text-lg font-bold text-primary">Rs. {{ number_format($product->price, 2) }}</span>
+                    </div>
 
                     <form action="{{ route('cart.add', $product->id) }}" method="POST">
                         @csrf
